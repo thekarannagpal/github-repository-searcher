@@ -7,7 +7,7 @@
 | OpenAPI JSON (live) | `https://github-repository-searcher-xnbz.onrender.com/v3/api-docs` |
 | Static Swagger UI (repo) | `docs/swagger-ui.html` (open it in a browser; loads `docs/openapi.json`) |
 | Static OpenAPI spec | `docs/openapi.json` |
-| Loom video | _TODO — fill after recording_ |
+| Loom video | https://www.loom.com/share/6afda4a6c3bd4b85aa416571aa715789 |
 | Demo slide deck | `docs/slides.html` — open in a browser and screen-record while narrating |
 | Deployment guide | `DEPLOYMENT.md` — Render Blueprint steps |
 

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GitHub Repository Searcher — Demo Slides</title>
+<style>
+  :root {
+    --ink: #10202e;
+    --muted: #5b6b7b;
+    --accent: #2563eb;
+    --accent2: #0ea5e9;
+    --bg: #f4f7fb;
+    --card: #ffffff;
+    --code: #0b1622;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Segoe UI", Inter, Arial, sans-serif;
+  }
+  .deck { max-width: 1180px; margin: 0 auto; padding: 28px 32px 90px; }
+  .slide {
+    display: none; background: var(--card); border-radius: 18px;
+    box-shadow: 0 14px 40px rgba(16,32,46,.10);
+    min-height: 620px; padding: 54px 64px; position: relative;
+    border: 1px solid rgba(16,32,46,.06);
+  }
+  .slide.active { display: block; }
+  .kicker {
+    text-transform: uppercase; letter-spacing: .16em; font-size: 13px;
+    font-weight: 700; color: var(--accent); margin-bottom: 14px;
+  }
+  h1 { font-size: 54px; line-height: 1.1; margin: 0 0 18px; }
+  h2 { font-size: 40px; line-height: 1.15; margin: 0 0 20px; }
+  h3 { font-size: 22px; margin: 26px 0 10px; }
+  p, li { font-size: 21px; line-height: 1.55; color: #24384a; }
+  ul { padding-left: 26px; }
+  li { margin: 8px 0; }
+  .sub { color: var(--muted); font-size: 22px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
+  .card {
+    background: #f8fbff; border: 1px solid #dbe6f3; border-radius: 14px; padding: 22px 26px;
+  }
+  .card b { color: var(--accent); }
+  pre {
+    background: var(--code); color: #d7e7f7; border-radius: 12px; padding: 20px 24px;
+    overflow-x: auto; font-size: 17px; line-height: 1.5; margin: 14px 0 0;
+  }
+  code { font-family: "Cascadia Code", Consolas, monospace; }
+  .pill {
+    display: inline-block; background: #e0edff; color: #1d4ed8; padding: 6px 14px;
+    border-radius: 999px; font-weight: 700; font-size: 15px; margin: 4px 6px 4px 0;
+  }
+  .num {
+    position: absolute; right: 34px; bottom: 26px; color: #9aabbc;
+    font-size: 15px; font-weight: 700;
+  }
+  .footer {
+    position: fixed; left: 0; right: 0; bottom: 0; background: rgba(244,247,251,.95);
+    border-top: 1px solid #dbe4ee; padding: 14px; text-align: center; z-index: 5;
+  }
+  button {
+    background: var(--accent); color: white; border: 0; border-radius: 9px;
+    padding: 10px 20px; font-size: 16px; font-weight: 700; cursor: pointer; margin: 0 6px;
+  }
+  button.secondary { background: #e2e8f0; color: #24384a; }
+  .hint { color: var(--muted); font-size: 14px; margin-left: 12px; }
+  .big { font-size: 30px; font-weight: 700; color: var(--accent); }
+  .check { color: #16a34a; font-weight: 700; }
+  @media print {
+    .slide { display: block !important; page-break-after: always; box-shadow: none; }
+    .footer { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+  <section class="slide active">
+    <div class="kicker">Backend Assignment · Live Demo</div>
+    <h1>GitHub Repository<br>Searcher</h1>
+    <p class="sub">A Spring Boot REST API that searches GitHub, stores results in PostgreSQL, and queries them with filters.</p>
+    <div style="margin-top:34px">
+      <span class="pill">Java 17</span><span class="pill">Spring Boot 3.3</span>
+      <span class="pill">PostgreSQL</span><span class="pill">JUnit · Mockito</span>
+      <span class="pill">Swagger</span>
+    </div>
+    <p style="margin-top:40px;color:#5b6b7b">Use → / ← arrow keys to navigate. Press P to print all slides.</p>
+    <div class="num">1 / 11</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">What the assignment asked for</div>
+    <h2>Requirements at a glance</h2>
+    <div class="grid">
+      <div class="card"><b>1. Search GitHub</b><p>Query by repository name, language and sort key (stars / forks / updated).</p></div>
+      <div class="card"><b>2. Persist results</b><p>Store repository details and statistics in PostgreSQL; update existing rows, never duplicate.</p></div>
+      <div class="card"><b>3. Retrieve stored results</b><p>Filter by language, minimum stars and sort order through a second REST endpoint.</p></div>
+      <div class="card"><b>4. Robustness</b><p>Handle invalid responses, rate limits and empty results. No UI; Postman-testable.</p></div>
+    </div>
+    <div class="num">2 / 11</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Architecture</div>
+    <h2>Clean, layered design</h2>
+    <pre><code>Client (Postman / Swagger)
+        │
+        ▼
+GithubController ──────► validation + DTO mapping
+        │
+        ├──► GithubSearchService ──► GithubApiClient ──► api.github.com
+        │                              │
+        │                              └──► Rate-limit / error translation
+        │
+        └──► RepositoryService ──────► RepositoryRepository (JPA)
+                                         │
+                                         ▼
+                                     PostgreSQL</code></pre>
+    <p class="sub" style="margin-top:20px">Dedicated mapper and DTOs keep GitHub's snake_case payload out of the API response and the database entity.</p>
+    <div class="num">3 / 11</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Run it</div>
+    <h2>Two ways to start</h2>
+    <h3>With PostgreSQL (Docker Compose)</h3>
+    <pre><code>docker compose up -d
+mvn spring-boot:run</code></pre>
+    <h3>Without Docker — H2 demo profile</h3>
+    <pre><code>mvn spring-boot:run -Dspring-boot.run.profiles=demo</code></pre>
+    <p class="sub" style="margin-top:20px">App: <code>http://localhost:8080</code> · Swagger: <code>/swagger-ui.html</code></p>
+    <div class="num">4 / 11</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">API documentation</div>
+    <h2>Swagger UI</h2>
+    <p>Open the live Swagger documentation and show the two endpoints with their schemas.</p>
+    <pre><code>&lt;live-url&gt;/swagger-ui.html
+&lt;live-url&gt;/v3/api-docs</code></pre>
+    <div class="grid" style="margin-top:24px">
+      <div class="card"><b>POST /api/github/search</b><p>Body: <code>query</code>, <code>language</code>, <code>sort</code>. Fetches from GitHub and upserts.</p></div>
+      <div class="card"><b>GET /api/github/repositories</b><p>Params: <code>language</code>, <code>minStars</code>, <code>sort</code>. Reads local database.</p></div>
+    </div>
+    <p class="sub" style="margin-top:18px">A static copy is also in the repo: <code>docs/swagger-ui.html</code></p>
+    <div class="num">5 / 11</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Endpoint 1 · live</div>
+    <h2>Search GitHub and save</h2>
+    <p><span class="pill">POST</span> <code>/api/github/search</code></p>
+    <pre><code>{
+  "query": "spring boot",
+  "language": "Java",
+  "sort": "stars"
+}</code></pre>
+    <p style="margin-top:22px">Response contains a message plus the saved repositories with id, name, description, owner, language, stars, forks, lastUpdated and extra statistics.</p>
+    <div class="num">6 / 11</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Upsert behaviour</div>
+    <h2>Repeated searches stay clean</h2>
+    <p>The GitHub repository id is the database primary key.</p>
+    <ul>
+      <li>First search → new row inserted.</li>
+      <li>Same search again → existing row <b>updated</b> with fresh stars/forks/timestamps.</li>
+      <li>No duplicates, so the stored dataset always reflects GitHub's latest data.</li>
+    </ul>
+    <pre><code>repositoryRepository.saveAll(entities);  // JPA upsert by id</code></pre>
+    <div class="num">7 / 11</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Endpoint 2 · live</div>
+    <h2>Retrieve stored results</h2>
+    <p><span class="pill">GET</span> <code>/api/github/repositories?language=Java&amp;minStars=100&amp;sort=stars</code></p>
+    <ul>
+      <li><b>language</b> — case-insensitive filter</li>
+      <li><b>minStars</b> — minimum star count</li>
+      <li><b>sort</b> — stars, forks or updated (descending, default stars)</li>
+    </ul>
+    <p class="sub">Implemented with JPA Specifications; sort keys are whitelisted through an enum.</p>
+    <div class="num">8 / 11</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Edge cases</div>
+    <h2>Errors are handled explicitly</h2>
+    <div class="grid">
+      <div class="card"><b>400 Bad Request</b><p>Blank query, invalid sort, negative minStars, malformed JSON — with field-level messages.</p></div>
+      <div class="card"><b>429 Too Many Requests</b><p>GitHub rate-limit headers are translated into 429 plus <code>Retry-After</code>.</p></div>
+      <div class="card"><b>502 Bad Gateway</b><p>GitHub unreachable, timeout, or non-success status from the upstream API.</p></div>
+      <div class="card"><b>200 + empty list</b><p>No matches is a valid result, not an error; nothing is written to the database.</p></div>
+    </div>
+    <div class="num">9 / 11</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Quality</div>
+    <h2>Tests: <span class="big">22 passing</span></h2>
+    <ul>
+      <li><b>Controller slice tests</b> — happy paths, validation, default sort, error status codes</li>
+      <li><b>HTTP client tests</b> — response mapping, empty results, 403 rate limits, 500 upstream errors</li>
+      <li><b>Service tests</b> — orchestration and empty-result short-circuit with Mockito</li>
+      <li><b>JPA tests with H2</b> — filters, sorting and upsert against a real database</li>
+    </ul>
+    <pre><code>mvn test   # BUILD SUCCESS</code></pre>
+    <div class="num">10 / 11</div>
+  </section>
+
+  <section class="slide">
+    <div class="kicker">Deployment</div>
+    <h2>Live on Render</h2>
+    <ul>
+      <li><span class="check">✓</span> Docker image built from the included <code>Dockerfile</code></li>
+      <li><span class="check">✓</span> PostgreSQL provisioned from <code>render.yaml</code></li>
+      <li><span class="check">✓</span> Health check at <code>/actuator/health</code></li>
+      <li><span class="check">✓</span> <code>GITHUB_TOKEN</code> for a higher GitHub rate limit</li>
+    </ul>
+    <h3>Submission links</h3>
+    <pre><code>Live:     &lt;live-url&gt;
+Swagger:  &lt;live-url&gt;/swagger-ui.html
+Loom:     &lt;your Loom recording link&gt;</code></pre>
+    <p class="sub" style="margin-top:20px">Thank you — happy to answer questions.</p>
+    <div class="num">11 / 11</div>
+  </section>
+
+</div>
+
+<div class="footer">
+  <button class="secondary" onclick="go(-1)">← Previous</button>
+  <button onclick="go(1)">Next →</button>
+  <span class="hint">Arrow keys navigate · P prints all slides · Designed for Loom screen recording</span>
+</div>
+
+<script>
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  let index = 0;
+  function show(i) {
+    index = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s, n) => s.classList.toggle('active', n === index));
+  }
+  function go(delta) { show(index + delta); }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+    if (e.key.toLowerCase() === 'p') { window.print(); }
+  });
+</script>
+</body>
+</html>

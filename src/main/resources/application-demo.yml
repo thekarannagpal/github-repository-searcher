@@ -1,0 +1,12 @@
+# Demo profile: runs the whole app with an in-memory H2 database, no Docker required.
+# Start with: mvn spring-boot:run -Dspring-boot.run.profiles=demo
+spring:
+  datasource:
+    url: jdbc:h2:mem:githubsearch;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    open-in-view: false

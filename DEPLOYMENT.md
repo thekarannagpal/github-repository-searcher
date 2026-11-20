@@ -31,16 +31,16 @@ git push -u origin main
 Your live URL will be shown in the dashboard, typically:
 
 ```
-https://github-repository-searcher.onrender.com
+https://github-repository-searcher-xnbz.onrender.com
 ```
 
 ## 3. Verify the deployment
 
 ```text
-GET  https://github-repository-searcher.onrender.com/actuator/health   -> {"status":"UP"}
-GET  https://github-repository-searcher.onrender.com/swagger-ui.html   -> Swagger UI
-GET  https://github-repository-searcher.onrender.com/v3/api-docs       -> OpenAPI JSON
-POST https://github-repository-searcher.onrender.com/api/github/search
+GET  https://github-repository-searcher-xnbz.onrender.com/actuator/health   -> {"status":"UP"}
+GET  https://github-repository-searcher-xnbz.onrender.com/swagger-ui.html   -> Swagger UI
+GET  https://github-repository-searcher-xnbz.onrender.com/v3/api-docs       -> OpenAPI JSON
+POST https://github-repository-searcher-xnbz.onrender.com/api/github/search
 ```
 
 Example POST body:
@@ -52,15 +52,15 @@ Example POST body:
 Then:
 
 ```text
-GET https://github-repository-searcher.onrender.com/api/github/repositories?language=Java&minStars=100&sort=stars
+GET https://github-repository-searcher-xnbz.onrender.com/api/github/repositories?language=Java&minStars=100&sort=stars
 ```
 
 ## 4. Fill in the submission
 
 Copy the live URL into `SUBMISSION.md` and your submission form:
 
-- Live URL: `https://github-repository-searcher.onrender.com`
-- Swagger: `https://github-repository-searcher.onrender.com/swagger-ui.html`
+- Live URL: `https://github-repository-searcher-xnbz.onrender.com`
+- Swagger: `https://github-repository-searcher-xnbz.onrender.com/swagger-ui.html`
 - Loom: link to your recording
 
 ## Notes

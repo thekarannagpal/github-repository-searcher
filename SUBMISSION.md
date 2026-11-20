@@ -2,9 +2,9 @@
 
 | Item | Link / Value |
 | --- | --- |
-| Live deployed URL | _TODO — fill after deployment_ |
-| Swagger UI (live) | `<live-url>/swagger-ui.html` |
-| OpenAPI JSON (live) | `<live-url>/v3/api-docs` |
+| Live deployed URL | https://github-repository-searcher-xnbz.onrender.com |
+| Swagger UI (live) | `https://github-repository-searcher-xnbz.onrender.com/swagger-ui.html` |
+| OpenAPI JSON (live) | `https://github-repository-searcher-xnbz.onrender.com/v3/api-docs` |
 | Static Swagger UI (repo) | `docs/swagger-ui.html` (open it in a browser; loads `docs/openapi.json`) |
 | Static OpenAPI spec | `docs/openapi.json` |
 | Loom video | _TODO — fill after recording_ |
@@ -43,7 +43,7 @@ mvn spring-boot:run -Dspring-boot.run.profiles=demo
 > "The app starts on port 8080. The demo profile uses in-memory H2 so it can be shown without Docker."
 
 ### 0:55–1:40 — Swagger documentation
-Open `<live-url>/swagger-ui.html` (or `http://localhost:8080/swagger-ui.html`).
+Open `https://github-repository-searcher-xnbz.onrender.com/swagger-ui.html` (or `http://localhost:8080/swagger-ui.html`).
 
 > "Here is the generated Swagger documentation. Two endpoints: POST /api/github/search and
 > GET /api/github/repositories. I'll execute each one."
@@ -103,7 +103,7 @@ mvn test
 
 ## Before recording
 
-1. Confirm the live URL responds: `<live-url>/swagger-ui.html`.
+1. Confirm the live URL responds: `https://github-repository-searcher-xnbz.onrender.com/swagger-ui.html`.
 2. Set `GITHUB_TOKEN` on the deployed app if possible, so the POST demo won't hit rate limits.
 3. Run the POST once before recording so the GET has data to show.
 4. Hide notifications, close unrelated tabs, and use a 1080p recording.

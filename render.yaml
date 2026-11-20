@@ -1,0 +1,37 @@
+databases:
+  - name: github-search-db
+    databaseName: githubsearch
+    user: githubsearch
+    plan: free
+
+services:
+  - type: web
+    name: github-repository-searcher
+    runtime: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: DB_HOST
+        fromDatabase:
+          name: github-search-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: github-search-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: github-search-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: github-search-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: github-search-db
+          property: password
+      - key: GITHUB_TOKEN
+        sync: false
